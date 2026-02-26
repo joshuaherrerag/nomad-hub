@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getHours } from "date-fns";
@@ -16,7 +17,9 @@ import {
   Users,
   MessageCircle,
   ArrowRight,
+  RefreshCw,
 } from "lucide-react";
+import { toast } from "sonner";
 
 /* ─── Greeting ─── */
 function getGreeting(name: string) {
@@ -81,6 +84,20 @@ function BenefitMiniCard({ partner_name, title, value_label }: { partner_name: s
 export default function DashboardPage() {
   const { user, profile } = useAuth();
   const firstName = (profile?.full_name ?? "").split(" ")[0] || "Hola";
+  const [syncing, setSyncing] = useState(false);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    try {
+      const res = await supabase.functions.invoke("sync-remotive");
+      if (res.error) throw res.error;
+      toast.success(`Se sincronizaron ${res.data?.synced ?? 0} empleos`);
+    } catch (e: any) {
+      toast.error(e.message ?? "Error al sincronizar");
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const { data: jobsToday, isLoading: loadingJobs } = useQuery({
     queryKey: ["stats", "jobsToday"],
@@ -139,9 +156,16 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* 1. Greeting */}
-      <h1 className="font-display text-2xl font-bold text-foreground">
-        {getGreeting(firstName)}
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-2xl font-bold text-foreground">
+          {getGreeting(firstName)}
+        </h1>
+        {import.meta.env.DEV && (
+          <Button variant="ghost" size="sm" className="gap-1.5 text-xs" onClick={handleSync} disabled={syncing}>
+            <RefreshCw className={`h-3.5 w-3.5 ${syncing ? "animate-spin" : ""}`} /> Sync empleos
+          </Button>
+        )}
+      </div>
 
       {/* 2. Stats */}
       <div className="flex gap-4 overflow-x-auto pb-2">
