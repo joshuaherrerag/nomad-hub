@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,16 +14,35 @@ const AVAILABILITY_MAP: Record<string, { label: string; className: string }> = {
 };
 
 export default function ProfilePage() {
-  const { user, profile } = useAuth();
+  const { id: paramId } = useParams<{ id?: string }>();
+  const { user, profile: ownProfile } = useAuth();
+
+  const isOwnProfile = !paramId || paramId === user?.id;
+  const profileId = isOwnProfile ? user?.id : paramId;
+
+  const { data: fetchedProfile, isLoading: loadingProfile } = useQuery({
+    queryKey: ["profile", profileId],
+    enabled: !!profileId && !isOwnProfile,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", profileId!)
+        .single();
+      return data;
+    },
+  });
+
+  const profile = isOwnProfile ? ownProfile : fetchedProfile;
 
   const { data: skills, isLoading: loadingSkills } = useQuery({
-    queryKey: ["profile-skills", user?.id],
-    enabled: !!user,
+    queryKey: ["profile-skills", profileId],
+    enabled: !!profileId,
     queryFn: async () => {
       const { data } = await supabase
         .from("profile_skills")
         .select("skill_id, skills(name)")
-        .eq("profile_id", user!.id);
+        .eq("profile_id", profileId!);
       return data?.map((ps: any) => ps.skills?.name).filter(Boolean) as string[] ?? [];
     },
   });
@@ -66,11 +85,13 @@ export default function ProfilePage() {
               </Badge>
             )}
           </div>
-          <Button variant="secondary" size="sm" className="shrink-0 gap-1.5" asChild>
-            <Link to="/perfil/editar">
-              <Pencil className="h-3.5 w-3.5" /> Editar perfil
-            </Link>
-          </Button>
+          {isOwnProfile && (
+            <Button variant="secondary" size="sm" className="shrink-0 gap-1.5" asChild>
+              <Link to="/perfil/editar">
+                <Pencil className="h-3.5 w-3.5" /> Editar perfil
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
 

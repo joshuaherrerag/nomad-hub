@@ -14,6 +14,7 @@ import DashboardPage from "@/pages/DashboardPage";
 import JobsPage from "@/pages/JobsPage";
 import JobDetailPage from "@/pages/JobDetailPage";
 import BenefitsPage from "@/pages/BenefitsPage";
+import MembersPage from "@/pages/MembersPage";
 import ProfilePage from "@/pages/ProfilePage";
 import EditProfilePage from "@/pages/EditProfilePage";
 import NotFound from "@/pages/NotFound";
@@ -50,7 +51,9 @@ const App = () => (
             <Route path="/empleos" element={<JobsPage />} />
             <Route path="/empleos/:id" element={<JobDetailPage />} />
             <Route path="/beneficios" element={<BenefitsPage />} />
+            <Route path="/miembros" element={<MembersPage />} />
             <Route path="/perfil" element={<ProfilePage />} />
+            <Route path="/perfil/:id" element={<ProfilePage />} />
             <Route path="/perfil/editar" element={<EditProfilePage />} />
           </Route>
 
