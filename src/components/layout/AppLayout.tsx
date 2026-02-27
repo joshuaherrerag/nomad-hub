@@ -1,5 +1,5 @@
 import { Link, useLocation, Outlet } from "react-router-dom";
-import { LayoutDashboard, Briefcase, Gift, User, MessageCircle, LogOut } from "lucide-react";
+import { LayoutDashboard, Briefcase, Gift, Users, User, MessageCircle, LogOut } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
@@ -7,6 +7,7 @@ const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
   { icon: Briefcase, label: "Empleos", to: "/empleos" },
   { icon: Gift, label: "Beneficios", to: "/beneficios" },
+  { icon: Users, label: "Miembros", to: "/miembros" },
 ];
 
 const DISCORD_LINK = "https://discord.gg/nestify";
