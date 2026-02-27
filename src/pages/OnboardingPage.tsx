@@ -1,309 +1,204 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthStore } from "@/stores/authStore";
 import { toast } from "sonner";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import {
-  MapPin,
   Briefcase,
-  Heart,
+  Gift,
+  Users,
   ArrowRight,
-  ArrowLeft,
+  Check,
   Loader2,
-  Sparkles,
 } from "lucide-react";
 
 const INTEREST_OPTIONS = [
-  "Trabajo remoto",
-  "Freelance",
-  "Startups",
-  "Tecnología",
+  "Desarrollo",
   "Diseño",
   "Marketing",
-  "Finanzas",
-  "Viajes",
-  "Coworking",
-  "Networking",
-  "Salud & Bienestar",
+  "Datos",
+  "Negocios",
+  "Contenido",
+  "Legal",
   "Educación",
+  "Salud",
 ];
 
-const AVAILABILITY_OPTIONS = [
-  { value: "open", label: "Abierto a ofertas", description: "Buscando activamente" },
-  { value: "freelance", label: "Freelance", description: "Disponible para proyectos" },
-  { value: "unavailable", label: "No disponible", description: "Solo explorando" },
-];
-
-const STEPS = [
-  { icon: MapPin, label: "Tu información" },
-  { icon: Heart, label: "Intereses" },
-  { icon: Briefcase, label: "Disponibilidad" },
+const PILLS = [
+  { icon: Briefcase, label: "Empleos remotos" },
+  { icon: Gift, label: "Beneficios" },
+  { icon: Users, label: "Comunidad" },
 ];
 
 export default function OnboardingPage() {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const setProfile = useAuthStore((s) => s.setProfile);
 
   const [step, setStep] = useState(0);
+  const [interests, setInterests] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
 
-  // Form state
-  const [fullName, setFullName] = useState(profile?.full_name ?? "");
-  const [title, setTitle] = useState(profile?.title ?? "");
-  const [city, setCity] = useState(profile?.location_city ?? "");
-  const [country, setCountry] = useState(profile?.location_country ?? "");
-  const [interests, setInterests] = useState<string[]>(profile?.interests ?? []);
-  const [bio, setBio] = useState(profile?.bio ?? "");
-  const [availability, setAvailability] = useState(profile?.availability ?? "open");
-
-  const progress = ((step + 1) / STEPS.length) * 100;
-
   const toggleInterest = (interest: string) => {
-    setInterests((prev) =>
-      prev.includes(interest)
-        ? prev.filter((i) => i !== interest)
-        : [...prev, interest]
-    );
+    setInterests((prev) => {
+      if (prev.includes(interest)) return prev.filter((i) => i !== interest);
+      if (prev.length >= 5) return prev;
+      return [...prev, interest];
+    });
   };
 
-  const canAdvance = () => {
-    if (step === 0) return fullName.trim().length > 0;
-    if (step === 1) return interests.length > 0;
-    return true;
-  };
+  const completeOnboarding = useCallback(
+    async (selectedInterests: string[] = []) => {
+      if (!user) return;
+      setSaving(true);
+      try {
+        const { error } = await supabase
+          .from("profiles")
+          .update({
+            interests: selectedInterests.length > 0 ? selectedInterests : [],
+            onboarding_completed: true,
+          })
+          .eq("id", user.id);
 
-  const handleFinish = async () => {
-    if (!user) return;
-    setSaving(true);
-    try {
-      const { error } = await supabase
-        .from("profiles")
-        .update({
-          full_name: fullName.trim(),
-          title: title.trim() || null,
-          location_city: city.trim() || null,
-          location_country: country.trim() || null,
-          interests,
-          bio: bio.trim() || null,
-          availability,
-          onboarding_completed: true,
-        })
-        .eq("id", user.id);
+        if (error) throw error;
 
-      if (error) throw error;
+        const { data } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single();
+        setProfile(data);
 
-      // Refresh profile in store
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-      setProfile(data);
+        toast.success("Bienvenido a Nestify 🎉");
+        navigate("/dashboard", { replace: true });
+      } catch {
+        toast.error("Error al guardar. Intenta de nuevo.");
+      } finally {
+        setSaving(false);
+      }
+    },
+    [user, navigate, setProfile]
+  );
 
-      toast.success("¡Perfil completado!");
-      navigate("/dashboard", { replace: true });
-    } catch {
-      toast.error("Error al guardar tu perfil. Intenta de nuevo.");
-    } finally {
-      setSaving(false);
-    }
-  };
+  const handleSkip = () => completeOnboarding([]);
+  const handleFinish = () => completeOnboarding(interests);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-lg">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-            <Sparkles className="h-6 w-6 text-primary" />
-          </div>
-          <h1 className="font-display text-2xl font-bold text-foreground">
-            Completa tu perfil
+    <div className="relative h-screen w-screen overflow-hidden">
+      {/* Skip button */}
+      <button
+        onClick={handleSkip}
+        disabled={saving}
+        className="absolute right-6 top-6 z-20 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      >
+        Omitir
+      </button>
+
+      {/* Progress dots */}
+      <div className="absolute left-1/2 top-6 z-20 flex -translate-x-1/2 gap-2">
+        {[0, 1].map((i) => (
+          <div
+            key={i}
+            className={`h-2 w-2 rounded-full transition-colors duration-300 ${
+              i <= step ? "bg-primary" : "bg-border"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Slides container */}
+      <div
+        className="flex h-full w-[200vw] transition-transform duration-300 ease-in-out"
+        style={{ transform: `translateX(-${step * 100}vw)` }}
+      >
+        {/* STEP 0 — Welcome */}
+        <div className="relative flex h-full w-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-foreground to-[#16213E] px-6 text-center">
+          {/* Orange blob */}
+          <div className="pointer-events-none absolute left-1/2 top-1/3 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary opacity-20 blur-[120px]" />
+
+          <h2 className="relative z-10 font-display text-4xl font-bold text-primary-foreground">
+            Nestify
+          </h2>
+
+          <h1 className="relative z-10 mt-8 max-w-md font-display text-3xl font-bold leading-tight text-primary-foreground">
+            Tu carrera no tiene dirección fija.
+            <br />
+            <span className="text-primary-foreground">Tu comunidad sí.</span>
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Paso {step + 1} de {STEPS.length} — {STEPS[step].label}
+
+          <p className="relative z-10 mt-4 max-w-sm text-primary-foreground/70">
+            Estás a 2 pasos de acceder a empleos remotos, beneficios exclusivos
+            y una comunidad real en Latam.
+          </p>
+
+          <div className="relative z-10 mt-8 flex flex-wrap justify-center gap-3">
+            {PILLS.map(({ icon: Icon, label }) => (
+              <div
+                key={label}
+                className="flex items-center gap-2 rounded-full bg-primary-foreground/10 px-4 py-2 text-sm text-primary-foreground"
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </div>
+            ))}
+          </div>
+
+          <Button
+            onClick={() => setStep(1)}
+            className="relative z-10 mt-10 rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90"
+            size="lg"
+          >
+            Empezar
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </Button>
+
+          <p className="relative z-10 mt-3 text-xs text-primary-foreground/40">
+            Tarda menos de 1 minuto
           </p>
         </div>
 
-        {/* Progress */}
-        <Progress value={progress} className="mb-8 h-2" />
+        {/* STEP 1 — Interests */}
+        <div className="flex h-full w-screen flex-col items-center justify-center bg-background px-6 text-center">
+          <h1 className="font-display text-2xl font-bold text-foreground">
+            ¿En qué área trabajás?
+          </h1>
+          <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+            Elegí tus áreas para que personalicemos tu feed de empleos.
+          </p>
 
-        {/* Card */}
-        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
-          {/* Step 0 — Basic info */}
-          {step === 0 && (
-            <div className="space-y-4">
-              <div>
-                <Label className="font-body text-sm font-medium">
-                  Nombre completo *
-                </Label>
-                <Input
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Tu nombre"
-                  className="mt-1.5"
-                />
-              </div>
-              <div>
-                <Label className="font-body text-sm font-medium">
-                  Título profesional
-                </Label>
-                <Input
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Ej: Diseñador UX, Dev Full-Stack…"
-                  className="mt-1.5"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label className="font-body text-sm font-medium">Ciudad</Label>
-                  <Input
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="Ej: CDMX"
-                    className="mt-1.5"
-                  />
-                </div>
-                <div>
-                  <Label className="font-body text-sm font-medium">País</Label>
-                  <Input
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    placeholder="Ej: México"
-                    className="mt-1.5"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+          <div className="mt-8 flex max-w-md flex-wrap justify-center gap-2.5">
+            {INTEREST_OPTIONS.map((interest) => {
+              const selected = interests.includes(interest);
+              return (
+                <button
+                  key={interest}
+                  type="button"
+                  onClick={() => toggleInterest(interest)}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition-all ${
+                    selected
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-foreground hover:border-primary"
+                  }`}
+                >
+                  {selected && <Check className="h-3.5 w-3.5" />}
+                  {interest}
+                </button>
+              );
+            })}
+          </div>
 
-          {/* Step 1 — Interests */}
-          {step === 1 && (
-            <div className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Selecciona al menos uno para personalizar tu experiencia.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {INTEREST_OPTIONS.map((interest) => {
-                  const selected = interests.includes(interest);
-                  return (
-                    <button
-                      key={interest}
-                      type="button"
-                      onClick={() => toggleInterest(interest)}
-                      className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition-all ${
-                        selected
-                          ? "border-primary bg-primary/10 text-primary"
-                          : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
-                      }`}
-                    >
-                      {interest}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Step 2 — Availability + Bio */}
-          {step === 2 && (
-            <div className="space-y-5">
-              <div>
-                <Label className="font-body text-sm font-medium">
-                  Disponibilidad
-                </Label>
-                <div className="mt-2 space-y-2">
-                  {AVAILABILITY_OPTIONS.map((opt) => {
-                    const selected = availability === opt.value;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => setAvailability(opt.value)}
-                        className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all ${
-                          selected
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/40"
-                        }`}
-                      >
-                        <div
-                          className={`h-4 w-4 shrink-0 rounded-full border-2 transition-colors ${
-                            selected
-                              ? "border-primary bg-primary"
-                              : "border-muted"
-                          }`}
-                        />
-                        <div>
-                          <p className="text-sm font-medium text-foreground">
-                            {opt.label}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {opt.description}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div>
-                <Label className="font-body text-sm font-medium">
-                  Bio (opcional)
-                </Label>
-                <Textarea
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  placeholder="Cuéntanos un poco sobre ti…"
-                  rows={3}
-                  className="mt-1.5 resize-none"
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Navigation buttons */}
-        <div className="mt-6 flex items-center justify-between">
-          {step > 0 ? (
-            <Button
-              variant="ghost"
-              onClick={() => setStep((s) => s - 1)}
-              className="gap-1.5"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Atrás
-            </Button>
-          ) : (
-            <div />
-          )}
-
-          {step < STEPS.length - 1 ? (
-            <Button
-              onClick={() => setStep((s) => s + 1)}
-              disabled={!canAdvance()}
-              className="gap-1.5"
-            >
-              Siguiente
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          ) : (
-            <Button
-              onClick={handleFinish}
-              disabled={saving}
-              className="gap-1.5"
-            >
-              {saving && <Loader2 className="h-4 w-4 animate-spin" />}
-              Completar perfil
-            </Button>
-          )}
+          <Button
+            onClick={handleFinish}
+            disabled={interests.length === 0 || saving}
+            className="mt-10 rounded-full px-8 py-3 font-semibold"
+            size="lg"
+          >
+            {saving && <Loader2 className="mr-1 h-4 w-4 animate-spin" />}
+            Finalizar y explorar
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </Button>
         </div>
       </div>
     </div>
