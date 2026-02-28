@@ -43,7 +43,7 @@ export default function BenefitsPage() {
           <button
             key={cat}
             onClick={() => setActiveTab(cat)}
-            className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+            className={`shrink-0 min-h-[44px] rounded-full px-4 py-1.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
               activeTab === cat
                 ? "bg-primary text-primary-foreground"
                 : "border border-border bg-card text-muted-foreground hover:text-foreground"

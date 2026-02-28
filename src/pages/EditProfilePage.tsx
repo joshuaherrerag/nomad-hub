@@ -183,7 +183,8 @@ export default function EditProfilePage() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="group relative h-20 w-20 shrink-0 overflow-hidden rounded-full"
+          className="group relative h-20 w-20 shrink-0 overflow-hidden rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          aria-label="Cambiar foto de perfil"
         >
           {avatarUrl ? (
             <img src={avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
@@ -226,7 +227,7 @@ export default function EditProfilePage() {
             </FormItem>
           )} />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <FormField control={form.control} name="location_city" render={({ field }) => (
               <FormItem>
                 <FormLabel>Ciudad</FormLabel>
@@ -253,13 +254,13 @@ export default function EditProfilePage() {
           <FormField control={form.control} name="availability" render={({ field }) => (
             <FormItem>
               <FormLabel>Disponibilidad</FormLabel>
-              <div className="mt-1 grid grid-cols-3 gap-3">
+              <div className="mt-1 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {AVAILABILITY_OPTIONS.map((opt) => (
                   <button
                     key={opt.value}
                     type="button"
                     onClick={() => field.onChange(opt.value)}
-                    className={`rounded-xl border px-3 py-3 text-left transition-all ${
+                    className={`min-h-[44px] rounded-xl border px-3 py-3 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                       field.value === opt.value ? "border-primary bg-primary/5" : "border-border hover:border-primary/40"
                     }`}
                   >
@@ -279,7 +280,7 @@ export default function EditProfilePage() {
                 {selectedSkills.map((s) => (
                   <Badge key={s.id} className="gap-1 border-0 bg-primary/10 text-primary">
                     {s.name}
-                    <button type="button" onClick={() => removeSkill(s.id)}>
+                    <button type="button" onClick={() => removeSkill(s.id)} aria-label={`Quitar ${s.name}`}>
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
@@ -299,7 +300,7 @@ export default function EditProfilePage() {
                     <button
                       key={s.id}
                       type="button"
-                      className="flex w-full items-center px-3 py-2 text-sm text-foreground hover:bg-muted/10"
+                      className="flex w-full min-h-[44px] items-center px-3 py-2 text-sm text-foreground hover:bg-muted/10"
                       onClick={() => addSkill(s)}
                     >
                       {s.name}
@@ -308,7 +309,7 @@ export default function EditProfilePage() {
                   {showCreateOption && (
                     <button
                       type="button"
-                      className="flex w-full items-center gap-1.5 px-3 py-2 text-sm font-medium text-primary hover:bg-muted/10"
+                      className="flex w-full min-h-[44px] items-center gap-1.5 px-3 py-2 text-sm font-medium text-primary hover:bg-muted/10"
                       onClick={() => createAndAddSkill(skillSearch)}
                     >
                       <Plus className="h-3.5 w-3.5" /> Agregar "{skillSearch}"

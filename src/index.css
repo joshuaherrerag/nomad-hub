@@ -19,8 +19,8 @@
     --secondary: 29 86% 67%;
     --secondary-foreground: 234 43% 14%;
 
-    --muted: 220 9% 46%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 220 9% 40%;
+    --muted-foreground: 220 9% 40%;
 
     --accent: 172 55% 39%;
     --accent-foreground: 0 0% 100%;
@@ -81,6 +81,6 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-background text-foreground font-body antialiased overflow-x-hidden;
   }
 }

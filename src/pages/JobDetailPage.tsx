@@ -56,7 +56,10 @@ export default function JobDetailPage() {
   return (
     <div className="space-y-8 md:space-y-10">
       {/* Breadcrumb */}
-      <button onClick={() => navigate("/empleos")} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+      <button
+        onClick={() => navigate("/empleos")}
+        className="flex min-h-[44px] items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
+      >
         <ArrowLeft className="h-4 w-4" /> Volver a empleos
       </button>
 
@@ -66,7 +69,7 @@ export default function JobDetailPage() {
           {/* Header */}
           <div className="flex items-start gap-4">
             {job.company_logo_url ? (
-              <img src={job.company_logo_url} alt={job.company_name} className="h-14 w-14 shrink-0 rounded-xl object-cover" />
+              <img src={job.company_logo_url} alt={`Logo de ${job.company_name}`} className="h-14 w-14 shrink-0 rounded-xl object-cover" />
             ) : (
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 font-display text-base font-bold text-primary">
                 {initials}
@@ -162,7 +165,7 @@ export default function JobDetailPage() {
           <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-[0_8px_32px_rgba(231,111,81,0.1)]">
             <div className="flex items-center gap-3">
               {job.company_logo_url ? (
-                <img src={job.company_logo_url} alt={job.company_name} className="h-10 w-10 rounded-xl object-cover" />
+                <img src={job.company_logo_url} alt={`Logo de ${job.company_name}`} className="h-10 w-10 rounded-xl object-cover" />
               ) : (
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 font-display text-sm font-bold text-primary">
                   {initials}

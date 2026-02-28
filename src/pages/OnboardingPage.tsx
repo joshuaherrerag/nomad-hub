@@ -91,7 +91,7 @@ export default function OnboardingPage() {
       <button
         onClick={handleSkip}
         disabled={saving}
-        className="absolute right-6 top-6 z-20 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        className="absolute right-6 top-6 z-20 min-h-[44px] min-w-[44px] text-sm text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
       >
         Omitir
       </button>
@@ -176,7 +176,7 @@ export default function OnboardingPage() {
                   key={interest}
                   type="button"
                   onClick={() => toggleInterest(interest)}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition-all ${
+                  className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-full border px-4 py-2 text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                     selected
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-card text-foreground hover:border-primary"

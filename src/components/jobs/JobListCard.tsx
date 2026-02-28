@@ -33,24 +33,29 @@ export default function JobListCard({ job, saved, onToggleSave }: Props) {
 
   return (
     <div
-      className={`flex items-center gap-4 rounded-2xl border border-border bg-card p-5 md:p-6 transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)] ${
+      className={`flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 md:flex-row md:items-center md:gap-4 md:p-6 transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)] ${
         job.is_featured ? "border-l-4 border-l-primary bg-primary/5" : ""
       }`}
     >
       {/* Logo */}
-      {job.company_logo_url ? (
-        <img src={job.company_logo_url} alt={job.company_name} className="h-12 w-12 shrink-0 rounded-xl object-cover" />
-      ) : (
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 font-display text-sm font-bold text-primary">
-          {initials}
-        </div>
-      )}
+      <div className="flex items-center gap-3 md:gap-4">
+        {job.company_logo_url ? (
+          <img src={job.company_logo_url} alt={`Logo de ${job.company_name}`} className="h-12 w-12 shrink-0 rounded-xl object-cover" />
+        ) : (
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 font-display text-sm font-bold text-primary" aria-hidden="true">
+            {initials}
+          </div>
+        )}
 
-      {/* Info */}
-      <div className="min-w-0 flex-1">
-        <h3 className="truncate font-display text-sm font-semibold text-foreground">{job.title}</h3>
-        <p className="truncate text-sm text-muted-foreground">{job.company_name}</p>
-        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+        {/* Info */}
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate font-display text-sm font-semibold text-foreground">{job.title}</h3>
+          <p className="truncate text-sm text-muted-foreground">{job.company_name}</p>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between gap-2 md:flex-1">
+        <div className="flex flex-wrap items-center gap-1.5">
           {job.category && (
             <Badge variant="secondary" className="border-0 bg-accent/10 text-xs text-accent">
               {job.category}
@@ -72,16 +77,22 @@ export default function JobListCard({ job, saved, onToggleSave }: Props) {
             </span>
           )}
         </div>
-      </div>
 
-      {/* Actions */}
-      <div className="flex shrink-0 items-center gap-1">
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => { e.stopPropagation(); onToggleSave(); }}>
-          <Heart className={`h-4 w-4 ${saved ? "fill-primary text-primary" : "text-muted-foreground"}`} />
-        </Button>
-        <Button variant="ghost" size="sm" className="h-8 text-xs" onClick={() => navigate(`/empleos/${job.id}`)}>
-          Ver oferta
-        </Button>
+        {/* Actions */}
+        <div className="flex shrink-0 items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-10 w-10"
+            onClick={(e) => { e.stopPropagation(); onToggleSave(); }}
+            aria-label={saved ? "Quitar de guardados" : "Guardar oferta"}
+          >
+            <Heart className={`h-4 w-4 ${saved ? "fill-primary text-primary" : "text-muted-foreground"}`} />
+          </Button>
+          <Button variant="ghost" size="sm" className="min-h-[44px] text-xs" onClick={() => navigate(`/empleos/${job.id}`)}>
+            Ver oferta
+          </Button>
+        </div>
       </div>
     </div>
   );
