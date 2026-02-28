@@ -24,10 +24,11 @@ export default function MemberCard({ member }: { member: MemberProfile }) {
   return (
     <button
       onClick={() => navigate(`/perfil/${member.id}`)}
-      className="flex w-full flex-col items-center rounded-2xl border border-border bg-card p-5 md:p-6 text-center transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)]"
+      className="flex w-full min-h-[44px] flex-col items-center rounded-2xl border border-border bg-card p-5 md:p-6 text-center transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      aria-label={`Ver perfil de ${member.full_name || "miembro"}`}
     >
       {member.avatar_url ? (
-        <img src={member.avatar_url} alt="" className="h-14 w-14 rounded-full object-cover" />
+        <img src={member.avatar_url} alt={`Avatar de ${member.full_name || "miembro"}`} className="h-14 w-14 rounded-full object-cover" />
       ) : (
         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 font-display text-lg font-bold text-primary">
           {initials || "?"}

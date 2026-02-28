@@ -28,13 +28,13 @@ export default function AppLayout() {
           <span className="font-display text-xl font-bold text-foreground">Nestify</span>
         </div>
 
-        <nav className="flex-1 space-y-1 px-3">
+        <nav className="flex-1 space-y-1 px-3" aria-label="Navegación principal">
           {navItems.map(({ icon: Icon, label, to }) => (
             <Link
               key={to}
               to={to}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                "flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 pathname.startsWith(to)
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:bg-muted/10 hover:text-foreground"
@@ -50,7 +50,7 @@ export default function AppLayout() {
           <Link
             to="/perfil"
             className={cn(
-              "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+              "flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               pathname.startsWith("/perfil")
                 ? "bg-primary/10 text-primary"
                 : "text-muted-foreground hover:bg-muted/10 hover:text-foreground"
@@ -64,7 +64,7 @@ export default function AppLayout() {
             href={DISCORD_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted/10 hover:text-foreground"
+            className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <MessageCircle className="h-5 w-5" />
             Comunidad
@@ -82,7 +82,11 @@ export default function AppLayout() {
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium text-foreground">{profile?.full_name || "Usuario"}</p>
             </div>
-            <button onClick={signOut} className="text-muted-foreground hover:text-foreground" title="Cerrar sesión">
+            <button
+              onClick={signOut}
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
+              aria-label="Cerrar sesión"
+            >
               <LogOut className="h-4 w-4" />
             </button>
           </div>
@@ -98,15 +102,19 @@ export default function AppLayout() {
       </header>
 
       {/* Mobile Bottom Nav */}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 flex border-t border-border bg-card md:hidden">
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-30 flex border-t border-border bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
+        aria-label="Navegación móvil"
+      >
         {[...navItems, { icon: User, label: "Perfil", to: "/perfil" }].map(({ icon: Icon, label, to }) => (
           <Link
             key={to}
             to={to}
             className={cn(
-              "flex flex-1 flex-col items-center gap-1 py-2 text-[10px]",
+              "flex flex-1 flex-col items-center justify-center gap-1 min-h-[56px] text-[10px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset rounded-sm",
               pathname.startsWith(to) ? "text-primary" : "text-muted-foreground"
             )}
+            aria-label={label}
           >
             <Icon className="h-5 w-5" />
             {label}
@@ -115,7 +123,7 @@ export default function AppLayout() {
       </nav>
 
       {/* Content */}
-      <main className="min-h-screen pb-24 pt-14 md:ml-64 md:pb-8 md:pt-0">
+      <main className="min-h-screen pb-[calc(5rem+env(safe-area-inset-bottom))] pt-14 md:ml-64 md:pb-8 md:pt-0">
         <div className="p-6 md:p-8">
           <Outlet />
         </div>
