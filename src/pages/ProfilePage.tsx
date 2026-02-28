@@ -8,8 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin, Pencil } from "lucide-react";
 
 const AVAILABILITY_MAP: Record<string, { label: string; className: string }> = {
-  open: { label: "● Disponible para trabajo", className: "bg-green-500/10 text-green-600" },
-  freelance: { label: "● Disponible para proyectos", className: "bg-amber-500/10 text-amber-600" },
+  open: { label: "● Disponible para trabajo", className: "bg-accent/10 text-accent" },
+  freelance: { label: "● Disponible para proyectos", className: "bg-secondary/10 text-secondary" },
   unavailable: { label: "● No disponible", className: "bg-muted/20 text-muted-foreground" },
 };
 
@@ -57,9 +57,9 @@ export default function ProfilePage() {
   const avail = AVAILABILITY_MAP[profile?.availability ?? "open"];
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-8 md:space-y-10">
       {/* Header card */}
-      <div className="rounded-2xl border border-border bg-card p-6">
+      <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-[0_8px_32px_rgba(231,111,81,0.1)]">
         <div className="flex items-start gap-5">
           {profile?.avatar_url ? (
             <img src={profile.avatar_url} alt="Avatar" className="h-20 w-20 shrink-0 rounded-full object-cover" />
@@ -96,8 +96,8 @@ export default function ProfilePage() {
       </div>
 
       {/* Bio */}
-      <div className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="mb-2 font-display text-lg font-bold text-foreground">Bio</h2>
+      <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-[0_8px_32px_rgba(231,111,81,0.1)]">
+        <h2 className="mb-2 font-display text-lg font-semibold text-foreground">Bio</h2>
         {profile?.bio ? (
           <p className="text-sm text-foreground/80">{profile.bio}</p>
         ) : (
@@ -106,8 +106,8 @@ export default function ProfilePage() {
       </div>
 
       {/* Skills */}
-      <div className="rounded-2xl border border-border bg-card p-6">
-        <h2 className="mb-3 font-display text-lg font-bold text-foreground">Habilidades</h2>
+      <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-[0_8px_32px_rgba(231,111,81,0.1)]">
+        <h2 className="mb-3 font-display text-lg font-semibold text-foreground">Habilidades</h2>
         {loadingSkills ? (
           <div className="flex flex-wrap gap-2">
             {[1, 2, 3].map((i) => <Skeleton key={i} className="h-7 w-20 rounded-full" />)}

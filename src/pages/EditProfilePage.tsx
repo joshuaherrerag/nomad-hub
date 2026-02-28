@@ -172,7 +172,7 @@ export default function EditProfilePage() {
   const showCreateOption = skillSearch.length > 1 && !skillSuggestions?.find((s) => s.name.toLowerCase() === skillSearch.toLowerCase());
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-2xl space-y-8 md:space-y-10">
       <div>
         <h1 className="font-display text-2xl font-bold text-foreground">Editar perfil</h1>
         <p className="mt-1 text-sm text-muted-foreground">Actualiza tu información personal</p>

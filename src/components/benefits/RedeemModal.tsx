@@ -59,7 +59,7 @@ export default function RedeemModal({ open, onOpenChange, benefit }: RedeemModal
                 {benefit.redeem_value}
               </div>
               <Button className="w-full gap-2" onClick={() => handleCopy(benefit.redeem_value!)}>
-                {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                {copied ? <Check className="h-4 w-4 text-accent" /> : <Copy className="h-4 w-4" />}
                 {copied ? "Copiado" : "Copiar código"}
               </Button>
             </>
@@ -77,7 +77,7 @@ export default function RedeemModal({ open, onOpenChange, benefit }: RedeemModal
                 {benefit.redeem_value}
               </div>
               <Button className="w-full gap-2" onClick={() => handleCopy(benefit.redeem_value!)}>
-                {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                {copied ? <Check className="h-4 w-4 text-accent" /> : <Copy className="h-4 w-4" />}
                 {copied ? "Copiado" : "Copiar email"}
               </Button>
             </>

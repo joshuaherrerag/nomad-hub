@@ -41,7 +41,7 @@ export default function MembersPage() {
   const totalShown = members.length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 md:space-y-10">
       {/* Header */}
       <div>
         <div className="flex items-center gap-3">

@@ -54,7 +54,7 @@ export default function JobDetailPage() {
     .toUpperCase();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 md:space-y-10">
       {/* Breadcrumb */}
       <button onClick={() => navigate("/empleos")} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Volver a empleos
@@ -90,9 +90,9 @@ export default function JobDetailPage() {
 
           {/* External banner */}
           {isExternal && (
-            <div className="flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3">
-              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
-              <p className="text-sm text-amber-800 dark:text-amber-200">
+            <div className="flex items-start gap-3 rounded-xl border border-secondary/20 bg-secondary/10 p-3">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
+              <p className="text-sm text-foreground">
                 Esta oferta es de <strong>{job.source}</strong>. Al hacer click serás redirigido al sitio original.
               </p>
             </div>
@@ -110,7 +110,7 @@ export default function JobDetailPage() {
         {/* Sidebar */}
         <aside className="w-full shrink-0 space-y-4 lg:w-80">
           {/* Summary card */}
-          <div className="grid grid-cols-2 gap-3 rounded-2xl border border-border bg-card p-4">
+          <div className="grid grid-cols-2 gap-3 rounded-2xl border border-border bg-card p-5 md:p-6 shadow-[0_8px_32px_rgba(231,111,81,0.1)]">
             {job.salary_min != null && job.salary_max != null && (
               <div>
                 <div className="mb-1 flex items-center gap-1.5 text-xs text-muted-foreground"><Briefcase className="h-3.5 w-3.5" /> Salario</div>
@@ -159,7 +159,7 @@ export default function JobDetailPage() {
           </Button>
 
           {/* Company card */}
-          <div className="rounded-2xl border border-border bg-card p-4">
+          <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-[0_8px_32px_rgba(231,111,81,0.1)]">
             <div className="flex items-center gap-3">
               {job.company_logo_url ? (
                 <img src={job.company_logo_url} alt={job.company_name} className="h-10 w-10 rounded-xl object-cover" />

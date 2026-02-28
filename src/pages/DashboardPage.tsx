@@ -45,7 +45,7 @@ const FALLBACK_BENEFITS = [
 /* ─── Stat Card ─── */
 function StatCard({ icon: Icon, label, value, loading }: { icon: React.ElementType; label: string; value?: number; loading: boolean }) {
   return (
-    <div className="min-w-[160px] flex-1 rounded-2xl border border-border bg-card p-4">
+    <div className="min-w-[160px] flex-1 rounded-2xl border border-border bg-card p-5 md:p-6 shadow-[0_8px_32px_rgba(231,111,81,0.1)]">
       <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
         <Icon className="h-4 w-4 text-primary" />
       </div>
@@ -63,7 +63,7 @@ function StatCard({ icon: Icon, label, value, loading }: { icon: React.ElementTy
 function BenefitMiniCard({ partner_name, title, value_label }: { partner_name: string; title: string; value_label?: string | null }) {
   const initials = partner_name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
   return (
-    <div className="min-w-[200px] rounded-2xl border border-border bg-card p-4">
+    <div className="min-w-[200px] rounded-2xl border border-border bg-card p-5 md:p-6 shadow-[0_8px_32px_rgba(231,111,81,0.1)]">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 font-display text-xs font-bold text-primary">
           {initials}
@@ -154,7 +154,7 @@ export default function DashboardPage() {
   const benefitsToShow = featuredBenefits && featuredBenefits.length > 0 ? featuredBenefits : FALLBACK_BENEFITS;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 md:space-y-10">
       {/* 1. Greeting */}
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-bold text-foreground">
@@ -178,7 +178,7 @@ export default function DashboardPage() {
       {/* 3. Jobs */}
       <section>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-display text-lg font-bold text-foreground">Empleos para vos</h2>
+          <h2 className="font-display text-lg font-semibold text-foreground">Empleos para vos</h2>
           <Link to="/empleos" className="flex items-center gap-1 text-sm font-medium text-primary hover:underline">
             Ver todos <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -220,7 +220,7 @@ export default function DashboardPage() {
       {/* 5. Featured Benefits */}
       <section>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-display text-lg font-bold text-foreground">Beneficios exclusivos</h2>
+          <h2 className="font-display text-lg font-semibold text-foreground">Beneficios exclusivos</h2>
           <Link to="/beneficios" className="flex items-center gap-1 text-sm font-medium text-primary hover:underline">
             Ver todos <ArrowRight className="h-3.5 w-3.5" />
           </Link>
