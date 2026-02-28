@@ -37,7 +37,7 @@ export default function BenefitCard({
 
   return (
     <div
-      className={`relative flex flex-col rounded-2xl border bg-card p-5 transition-shadow hover:shadow-[0_8px_32px_hsl(var(--primary)/0.08)] ${
+      className={`relative flex flex-col rounded-2xl border bg-card p-5 md:p-6 transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)] ${
         is_featured ? "border-2 border-primary" : "border-border"
       }`}
     >
@@ -47,7 +47,7 @@ export default function BenefitCard({
           <Badge className="border-0 bg-primary/10 text-xs font-semibold text-primary">Destacado</Badge>
         )}
         {expiringSoon && (
-          <Badge className="border-0 bg-amber-500/10 text-xs font-semibold text-amber-600">Vence pronto</Badge>
+          <Badge className="border-0 bg-secondary/10 text-xs font-semibold text-secondary">Vence pronto</Badge>
         )}
       </div>
 
@@ -64,7 +64,7 @@ export default function BenefitCard({
       </div>
 
       {/* Content */}
-      <h3 className="text-base font-semibold text-foreground">{title}</h3>
+      <h3 className="font-display text-base font-semibold text-foreground">{title}</h3>
       {description && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{description}</p>}
 
       {/* Value badge */}

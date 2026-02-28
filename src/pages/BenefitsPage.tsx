@@ -30,10 +30,10 @@ export default function BenefitsPage() {
   const filtered = activeTab === "Todos" ? items : items.filter((b) => b.category === activeTab);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 md:space-y-10">
       {/* Header */}
       <div>
-        <h1 className="font-display text-3xl font-bold text-foreground">Beneficios exclusivos</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground">Beneficios</h1>
         <p className="mt-1 text-muted-foreground">Descuentos y ventajas para la comunidad Nestify.</p>
       </div>
 

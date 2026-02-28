@@ -53,7 +53,7 @@ export default function JobCard({
 
   return (
     <div
-      className={`rounded-2xl border border-border bg-card p-5 transition-shadow duration-200 hover:shadow-[0_8px_32px_hsl(var(--primary)/0.1)] ${
+      className={`rounded-2xl border border-border bg-card p-5 md:p-6 transition-shadow duration-200 hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)] ${
         is_featured ? "border-l-4 border-l-primary bg-primary/5" : ""
       }`}
     >
@@ -72,7 +72,7 @@ export default function JobCard({
         )}
 
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-body text-sm font-semibold text-foreground">
+          <h3 className="truncate font-display text-sm font-semibold text-foreground">
             {title}
           </h3>
           <p className="truncate text-sm text-muted-foreground">{company_name}</p>

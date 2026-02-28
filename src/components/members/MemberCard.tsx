@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import type { MemberProfile } from "@/hooks/useMembers";
 
 const AVAILABILITY_MAP: Record<string, { label: string; className: string }> = {
-  open: { label: "Disponible", className: "bg-green-500/10 text-green-600" },
-  freelance: { label: "Para proyectos", className: "bg-amber-500/10 text-amber-600" },
+  open: { label: "Disponible", className: "bg-accent/10 text-accent" },
+  freelance: { label: "Para proyectos", className: "bg-secondary/10 text-secondary" },
   unavailable: { label: "No disponible", className: "bg-muted/20 text-muted-foreground" },
 };
 
@@ -24,7 +24,7 @@ export default function MemberCard({ member }: { member: MemberProfile }) {
   return (
     <button
       onClick={() => navigate(`/perfil/${member.id}`)}
-      className="flex w-full flex-col items-center rounded-2xl border border-border bg-card p-5 text-center transition-shadow hover:shadow-md"
+      className="flex w-full flex-col items-center rounded-2xl border border-border bg-card p-5 md:p-6 text-center transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)]"
     >
       {member.avatar_url ? (
         <img src={member.avatar_url} alt="" className="h-14 w-14 rounded-full object-cover" />
@@ -34,7 +34,7 @@ export default function MemberCard({ member }: { member: MemberProfile }) {
         </div>
       )}
 
-      <p className="mt-3 font-semibold text-foreground">{member.full_name || "Sin nombre"}</p>
+      <p className="mt-3 font-display font-semibold text-foreground">{member.full_name || "Sin nombre"}</p>
 
       {member.title && (
         <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">{member.title}</p>

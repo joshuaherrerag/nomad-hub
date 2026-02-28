@@ -33,7 +33,7 @@ export default function JobListCard({ job, saved, onToggleSave }: Props) {
 
   return (
     <div
-      className={`flex items-center gap-4 rounded-2xl border border-border bg-card p-4 transition-shadow hover:shadow-[0_8px_32px_hsl(var(--primary)/0.08)] ${
+      className={`flex items-center gap-4 rounded-2xl border border-border bg-card p-5 md:p-6 transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)] ${
         job.is_featured ? "border-l-4 border-l-primary bg-primary/5" : ""
       }`}
     >
@@ -48,7 +48,7 @@ export default function JobListCard({ job, saved, onToggleSave }: Props) {
 
       {/* Info */}
       <div className="min-w-0 flex-1">
-        <h3 className="truncate text-sm font-semibold text-foreground">{job.title}</h3>
+        <h3 className="truncate font-display text-sm font-semibold text-foreground">{job.title}</h3>
         <p className="truncate text-sm text-muted-foreground">{job.company_name}</p>
         <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
           {job.category && (
