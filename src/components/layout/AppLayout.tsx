@@ -1,6 +1,7 @@
 import { Link, useLocation, Outlet } from "react-router-dom";
-import { LayoutDashboard, Briefcase, Gift, Users, User, MessageCircle, LogOut } from "lucide-react";
+import { LayoutDashboard, Briefcase, Gift, Users, User, MessageCircle, LogOut, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdmin } from "@/hooks/useAdmin";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -15,6 +16,7 @@ const DISCORD_LINK = "https://discord.gg/nestify";
 export default function AppLayout() {
   const { pathname } = useLocation();
   const { profile, signOut } = useAuth();
+  const { isAdmin } = useAdmin();
 
   const initials = profile?.full_name
     ? profile.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
@@ -72,6 +74,19 @@ export default function AppLayout() {
               Discord
             </span>
           </a>
+
+          {isAdmin && (
+            <>
+              <div className="my-3 border-t border-border" />
+              <Link
+                to="/admin"
+                className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Settings className="h-5 w-5" />
+                Panel Admin
+              </Link>
+            </>
+          )}
         </nav>
 
         <div className="border-t border-border p-4">
