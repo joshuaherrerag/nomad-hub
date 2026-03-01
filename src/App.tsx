@@ -4,7 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import AdminRoute from "@/components/layout/AdminRoute";
 import AppLayout from "@/components/layout/AppLayout";
+import AdminLayout from "@/components/layout/AdminLayout";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
@@ -17,6 +19,10 @@ import BenefitsPage from "@/pages/BenefitsPage";
 import MembersPage from "@/pages/MembersPage";
 import ProfilePage from "@/pages/ProfilePage";
 import EditProfilePage from "@/pages/EditProfilePage";
+import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
+import AdminJobsPage from "@/pages/admin/AdminJobsPage";
+import AdminBenefitsPage from "@/pages/admin/AdminBenefitsPage";
+import AdminUsersPage from "@/pages/admin/AdminUsersPage";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -55,6 +61,18 @@ const App = () => (
             <Route path="/perfil" element={<ProfilePage />} />
             <Route path="/perfil/:id" element={<ProfilePage />} />
             <Route path="/perfil/editar" element={<EditProfilePage />} />
+          </Route>
+
+          {/* Admin routes */}
+          <Route element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }>
+            <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/admin/empleos" element={<AdminJobsPage />} />
+            <Route path="/admin/beneficios" element={<AdminBenefitsPage />} />
+            <Route path="/admin/usuarios" element={<AdminUsersPage />} />
           </Route>
 
           {/* Root redirect */}
