@@ -16,7 +16,7 @@ export function useJobs(filters: JobFilters) {
   return useInfiniteQuery({
     queryKey: ["jobs", filters],
     queryFn: async ({ pageParam = 0 }) => {
-      let q = supabase.from("jobs").select("*");
+      let q = supabase.from("jobs").select("*").eq("status", "active");
 
       if (filters.search) {
         q = q.or(`title.ilike.%${filters.search}%,company_name.ilike.%${filters.search}%`);
