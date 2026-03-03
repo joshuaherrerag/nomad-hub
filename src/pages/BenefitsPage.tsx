@@ -21,7 +21,7 @@ export default function BenefitsPage() {
   const { data: benefits, isLoading } = useQuery({
     queryKey: ["benefits"],
     queryFn: async () => {
-      const { data } = await supabase.from("benefits").select("*").order("created_at", { ascending: false });
+      const { data } = await supabase.from("benefits").select("*").eq("status", "active").order("created_at", { ascending: false });
       return data ?? [];
     },
   });

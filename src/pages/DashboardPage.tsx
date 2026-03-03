@@ -103,7 +103,7 @@ export default function DashboardPage() {
     queryKey: ["stats", "jobsToday"],
     queryFn: async () => {
       const since = new Date(Date.now() - 86_400_000).toISOString();
-      const { count } = await supabase.from("jobs").select("*", { count: "exact", head: true }).gte("published_at", since);
+      const { count } = await supabase.from("jobs").select("*", { count: "exact", head: true }).eq("status", "active").gte("published_at", since);
       return count ?? 0;
     },
   });
@@ -120,7 +120,7 @@ export default function DashboardPage() {
   const { data: benefitsCount, isLoading: loadingBenefits } = useQuery({
     queryKey: ["stats", "benefitsCount"],
     queryFn: async () => {
-      const { count } = await supabase.from("benefits").select("*", { count: "exact", head: true });
+      const { count } = await supabase.from("benefits").select("*", { count: "exact", head: true }).eq("status", "active");
       return count ?? 0;
     },
   });
@@ -137,7 +137,7 @@ export default function DashboardPage() {
   const { data: recentJobs, isLoading: loadingRecentJobs } = useQuery({
     queryKey: ["dashboard", "recentJobs"],
     queryFn: async () => {
-      const { data } = await supabase.from("jobs").select("*").order("published_at", { ascending: false }).limit(6);
+      const { data } = await supabase.from("jobs").select("*").eq("status", "active").order("published_at", { ascending: false }).limit(6);
       return data ?? [];
     },
   });
@@ -145,7 +145,7 @@ export default function DashboardPage() {
   const { data: featuredBenefits, isLoading: loadingFeaturedBenefits } = useQuery({
     queryKey: ["dashboard", "featuredBenefits"],
     queryFn: async () => {
-      const { data } = await supabase.from("benefits").select("*").eq("is_featured", true).limit(3);
+      const { data } = await supabase.from("benefits").select("*").eq("status", "active").eq("is_featured", true).limit(3);
       return data ?? [];
     },
   });
