@@ -187,6 +187,7 @@ export type Database = {
           availability: string | null
           avatar_url: string | null
           bio: string | null
+          cover_url: string | null
           created_at: string | null
           full_name: string | null
           id: string
@@ -194,12 +195,18 @@ export type Database = {
           location_city: string | null
           location_country: string | null
           onboarding_completed: boolean | null
+          social_github: string | null
+          social_instagram: string | null
+          social_linkedin: string | null
+          social_twitter: string | null
           title: string | null
+          website_url: string | null
         }
         Insert: {
           availability?: string | null
           avatar_url?: string | null
           bio?: string | null
+          cover_url?: string | null
           created_at?: string | null
           full_name?: string | null
           id: string
@@ -207,12 +214,18 @@ export type Database = {
           location_city?: string | null
           location_country?: string | null
           onboarding_completed?: boolean | null
+          social_github?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          social_twitter?: string | null
           title?: string | null
+          website_url?: string | null
         }
         Update: {
           availability?: string | null
           avatar_url?: string | null
           bio?: string | null
+          cover_url?: string | null
           created_at?: string | null
           full_name?: string | null
           id?: string
@@ -220,7 +233,12 @@ export type Database = {
           location_city?: string | null
           location_country?: string | null
           onboarding_completed?: boolean | null
+          social_github?: string | null
+          social_instagram?: string | null
+          social_linkedin?: string | null
+          social_twitter?: string | null
           title?: string | null
+          website_url?: string | null
         }
         Relationships: []
       }
