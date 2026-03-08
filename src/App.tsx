@@ -15,6 +15,7 @@ import OnboardingPage from "@/pages/OnboardingPage";
 import DashboardPage from "@/pages/DashboardPage";
 import JobsPage from "@/pages/JobsPage";
 import JobDetailPage from "@/pages/JobDetailPage";
+import PublishJobPage from "@/pages/PublishJobPage";
 import BenefitsPage from "@/pages/BenefitsPage";
 import MembersPage from "@/pages/MembersPage";
 import ProfilePage from "@/pages/ProfilePage";
