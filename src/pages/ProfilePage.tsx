@@ -81,7 +81,8 @@ export default function ProfilePage() {
         )}
 
         <div className="p-5 md:p-6">
-          <div className="flex items-start gap-5 -mt-12">
+          {/* Mobile: stacked layout */}
+          <div className="flex flex-col sm:flex-row sm:items-start sm:gap-5 -mt-12">
             {profile?.avatar_url ? (
               <img src={profile.avatar_url} alt="Avatar" className="h-20 w-20 shrink-0 rounded-full border-4 border-card object-cover" />
             ) : (
@@ -89,14 +90,23 @@ export default function ProfilePage() {
                 {initials || "?"}
               </div>
             )}
-            <div className="min-w-0 flex-1 pt-8">
-              <h1 className="font-display text-2xl font-bold text-foreground">
-                {profile?.full_name || "Sin nombre"}
-              </h1>
-              {profile?.title && <p className="text-muted-foreground">{profile.title}</p>}
+            <div className="min-w-0 flex-1 mt-3 sm:mt-8">
+              <div className="flex items-start justify-between gap-2">
+                <h1 className="font-display text-xl sm:text-2xl font-bold text-foreground break-words">
+                  {profile?.full_name || "Sin nombre"}
+                </h1>
+                {isOwnProfile && (
+                  <Button variant="secondary" size="sm" className="shrink-0 gap-1.5" asChild>
+                    <Link to="/perfil/editar">
+                      <Pencil className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Editar perfil</span><span className="sm:hidden">Editar</span>
+                    </Link>
+                  </Button>
+                )}
+              </div>
+              {profile?.title && <p className="text-sm sm:text-base text-muted-foreground">{profile.title}</p>}
               {(profile?.location_city || profile?.location_country) && (
                 <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                  <MapPin className="h-3.5 w-3.5" />
+                  <MapPin className="h-3.5 w-3.5 shrink-0" />
                   {[profile.location_city, profile.location_country].filter(Boolean).join(", ")}
                 </p>
               )}
@@ -106,13 +116,6 @@ export default function ProfilePage() {
                 </Badge>
               )}
             </div>
-            {isOwnProfile && (
-              <Button variant="secondary" size="sm" className="shrink-0 gap-1.5 mt-8" asChild>
-                <Link to="/perfil/editar">
-                  <Pencil className="h-3.5 w-3.5" /> Editar perfil
-                </Link>
-              </Button>
-            )}
           </div>
         </div>
       </div>
