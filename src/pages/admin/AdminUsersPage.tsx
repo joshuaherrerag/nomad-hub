@@ -29,7 +29,7 @@ export default function AdminUsersPage() {
   const [countryFilter, setCountryFilter] = useState("all");
   const [availabilityFilter, setAvailabilityFilter] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
-  const [confirmAction, setConfirmAction] = useState<{ type: string; user: any } | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{ type: string; user: any; currentRole?: string } | null>(null);
 
   // Fetch auth user emails via edge function
   const { data: authUsers } = useQuery({
