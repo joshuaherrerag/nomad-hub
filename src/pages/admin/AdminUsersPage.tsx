@@ -222,7 +222,6 @@ export default function AdminUsersPage() {
                         >
                           <Shield className={`h-4 w-4 ${role === "admin" ? "text-primary" : ""}`} />
                         </Button>
-                        </Button>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -252,21 +251,39 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      {/* Confirm Suspend */}
+      {/* Confirm Action Dialog */}
       <AlertDialog open={!!confirmAction} onOpenChange={() => setConfirmAction(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Suspender a {confirmAction?.user?.full_name}?</AlertDialogTitle>
+            <AlertDialogTitle>
+              {confirmAction?.type === "role"
+                ? confirmAction?.currentRole === "admin"
+                  ? `¿Quitar rol de admin a ${confirmAction?.user?.full_name || "este usuario"}?`
+                  : `¿Hacer admin a ${confirmAction?.user?.full_name || "este usuario"}?`
+                : `¿Suspender a ${confirmAction?.user?.full_name}?`}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Su disponibilidad se cambiará a "no disponible". El usuario seguirá teniendo acceso a la plataforma.
+              {confirmAction?.type === "role"
+                ? confirmAction?.currentRole === "admin"
+                  ? "Este usuario perderá acceso al panel de administración."
+                  : "Este usuario tendrá acceso completo al panel de administración y podrá gestionar empleos, beneficios y usuarios."
+                : "Su disponibilidad se cambiará a \"no disponible\". El usuario seguirá teniendo acceso a la plataforma."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction onClick={() => {
-              if (confirmAction?.user) suspendUser.mutate(confirmAction.user.id);
+              if (!confirmAction?.user) return;
+              if (confirmAction.type === "role") {
+                toggleRole.mutate({ userId: confirmAction.user.id, currentRole: confirmAction.currentRole });
+              } else {
+                suspendUser.mutate(confirmAction.user.id);
+              }
+              setConfirmAction(null);
             }}>
-              Suspender
+              {confirmAction?.type === "role"
+                ? confirmAction?.currentRole === "admin" ? "Quitar admin" : "Hacer admin"
+                : "Suspender"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
