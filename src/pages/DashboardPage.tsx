@@ -211,7 +211,7 @@ export default function DashboardPage() {
         </div>
         <Button
           className="w-full rounded-full bg-card font-semibold text-foreground hover:bg-card/90 md:w-auto"
-          onClick={() => window.open("https://discord.gg/nestify", "_blank")}
+          onClick={() => window.open("https://discord.gg/abscAb7v", "_blank")}
         >
           Unirse al Discord
         </Button>
