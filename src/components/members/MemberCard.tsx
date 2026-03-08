@@ -35,7 +35,7 @@ export default function MemberCard({ member }: { member: MemberProfile }) {
         </div>
       )}
 
-      <p className="mt-3 font-display font-semibold text-foreground">{member.full_name || "Sin nombre"}</p>
+      <p className="mt-3 w-full truncate font-display font-semibold text-foreground">{member.full_name || "Sin nombre"}</p>
 
       {member.title && (
         <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">{member.title}</p>
