@@ -11,7 +11,7 @@ const navItems = [
   { icon: Users, label: "Miembros", to: "/miembros" },
 ];
 
-const DISCORD_LINK = "https://discord.gg/nestify";
+const DISCORD_LINK = "https://discord.gg/abscAb7v";
 
 export default function AppLayout() {
   const { pathname } = useLocation();
