@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { Search, SlidersHorizontal, X, SearchX } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Search, SlidersHorizontal, X, SearchX, PlusCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -131,6 +132,11 @@ export default function JobsPage() {
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <h1 className="font-display text-3xl font-bold text-foreground">Empleos</h1>
+            <Button asChild size="sm" className="gap-1.5">
+              <Link to="/empleos/publicar">
+                <PlusCircle className="h-4 w-4" /> Publicar
+              </Link>
+            </Button>
             {/* Mobile filter button */}
             <Sheet>
               <SheetTrigger asChild>

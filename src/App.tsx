@@ -15,6 +15,7 @@ import OnboardingPage from "@/pages/OnboardingPage";
 import DashboardPage from "@/pages/DashboardPage";
 import JobsPage from "@/pages/JobsPage";
 import JobDetailPage from "@/pages/JobDetailPage";
+import PublishJobPage from "@/pages/PublishJobPage";
 import BenefitsPage from "@/pages/BenefitsPage";
 import MembersPage from "@/pages/MembersPage";
 import ProfilePage from "@/pages/ProfilePage";
@@ -56,6 +57,7 @@ const App = () => (
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/empleos" element={<JobsPage />} />
             <Route path="/empleos/:id" element={<JobDetailPage />} />
+            <Route path="/empleos/publicar" element={<PublishJobPage />} />
             <Route path="/beneficios" element={<BenefitsPage />} />
             <Route path="/miembros" element={<MembersPage />} />
             <Route path="/perfil" element={<ProfilePage />} />

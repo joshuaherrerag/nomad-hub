@@ -105,6 +105,7 @@ export type Database = {
           description: string | null
           id: string
           is_featured: boolean | null
+          posted_by: string | null
           published_at: string | null
           salary_max: number | null
           salary_min: number | null
@@ -123,6 +124,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_featured?: boolean | null
+          posted_by?: string | null
           published_at?: string | null
           salary_max?: number | null
           salary_min?: number | null
@@ -141,6 +143,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_featured?: boolean | null
+          posted_by?: string | null
           published_at?: string | null
           salary_max?: number | null
           salary_min?: number | null
@@ -150,7 +153,15 @@ export type Database = {
           status?: string | null
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "jobs_posted_by_fkey"
+            columns: ["posted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profile_skills: {
         Row: {
