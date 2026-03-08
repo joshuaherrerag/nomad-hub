@@ -23,7 +23,7 @@ export default function AdminLayout() {
     to === "/admin" ? pathname === "/admin" : pathname.startsWith(to);
 
   return (
-    <div className="dark min-h-screen bg-background">
+    <div className="dark min-h-screen bg-background text-foreground">
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 z-30 hidden h-full w-60 flex-col border-r border-border bg-card md:flex">
         <div className="px-5 py-5">
