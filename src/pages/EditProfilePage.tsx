@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { Loader2, X, Camera, Plus } from "lucide-react";
+import { Loader2, X, Camera, Plus, ImageIcon, Globe, Linkedin, Github, Twitter, Instagram } from "lucide-react";
 
 const COUNTRIES = [
   "Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica", "Ecuador",
@@ -30,6 +30,11 @@ const schema = z.object({
   location_city: z.string().optional(),
   location_country: z.string().optional(),
   availability: z.enum(["open", "freelance", "unavailable"]),
+  website_url: z.string().url("URL inválida").or(z.literal("")).optional(),
+  social_linkedin: z.string().url("URL inválida").or(z.literal("")).optional(),
+  social_github: z.string().url("URL inválida").or(z.literal("")).optional(),
+  social_twitter: z.string().url("URL inválida").or(z.literal("")).optional(),
+  social_instagram: z.string().url("URL inválida").or(z.literal("")).optional(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -45,8 +50,11 @@ export default function EditProfilePage() {
   const { user, profile } = useAuth();
   const setProfile = useAuthStore((s) => s.setProfile);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(profile?.avatar_url ?? "");
+  const [coverUrl, setCoverUrl] = useState((profile as any)?.cover_url ?? "");
 
   // Skills state
   const [selectedSkills, setSelectedSkills] = useState<{ id: string; name: string }[]>([]);
@@ -62,6 +70,11 @@ export default function EditProfilePage() {
       location_city: profile?.location_city ?? "",
       location_country: profile?.location_country ?? "",
       availability: (profile?.availability as FormValues["availability"]) ?? "open",
+      website_url: (profile as any)?.website_url ?? "",
+      social_linkedin: (profile as any)?.social_linkedin ?? "",
+      social_github: (profile as any)?.social_github ?? "",
+      social_twitter: (profile as any)?.social_twitter ?? "",
+      social_instagram: (profile as any)?.social_instagram ?? "",
     },
   });
 
@@ -112,6 +125,25 @@ export default function EditProfilePage() {
     }
   };
 
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setUploadingCover(true);
+    try {
+      const path = `${user.id}/cover.jpg`;
+      const { error: uploadError } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+      const url = `${data.publicUrl}?t=${Date.now()}`;
+      setCoverUrl(url);
+      toast.success("Portada actualizada");
+    } catch {
+      toast.error("Error al subir portada");
+    } finally {
+      setUploadingCover(false);
+    }
+  };
+
   const addSkill = async (skill: { id: string; name: string }) => {
     if (selectedSkills.length >= 10) return toast.error("Máximo 10 habilidades");
     if (selectedSkills.find((s) => s.id === skill.id)) return;
@@ -144,7 +176,13 @@ export default function EditProfilePage() {
           location_country: values.location_country || null,
           availability: values.availability,
           avatar_url: avatarUrl || null,
-        })
+          cover_url: coverUrl || null,
+          website_url: values.website_url || null,
+          social_linkedin: values.social_linkedin || null,
+          social_github: values.social_github || null,
+          social_twitter: values.social_twitter || null,
+          social_instagram: values.social_instagram || null,
+        } as any)
         .eq("id", user.id);
       if (error) throw error;
 
@@ -176,6 +214,30 @@ export default function EditProfilePage() {
       <div>
         <h1 className="font-display text-2xl font-bold text-foreground">Editar perfil</h1>
         <p className="mt-1 text-sm text-muted-foreground">Actualiza tu información personal</p>
+      </div>
+
+      {/* Cover Photo */}
+      <div className="space-y-2">
+        <Label>Foto de portada</Label>
+        <button
+          type="button"
+          onClick={() => coverInputRef.current?.click()}
+          className="group relative h-40 w-full overflow-hidden rounded-2xl border border-dashed border-border bg-muted/20 transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label="Cambiar foto de portada"
+        >
+          {coverUrl ? (
+            <img src={coverUrl} alt="Portada" className="h-full w-full object-cover" />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-muted-foreground">
+              <ImageIcon className="h-8 w-8" />
+              <span className="text-sm">Haz click para subir una portada</span>
+            </div>
+          )}
+          <div className="absolute inset-0 flex items-center justify-center bg-foreground/40 opacity-0 transition-opacity group-hover:opacity-100">
+            {uploadingCover ? <Loader2 className="h-6 w-6 animate-spin text-primary-foreground" /> : <Camera className="h-6 w-6 text-primary-foreground" />}
+          </div>
+        </button>
+        <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={handleCoverUpload} />
       </div>
 
       {/* Avatar */}
@@ -271,6 +333,69 @@ export default function EditProfilePage() {
               </div>
             </FormItem>
           )} />
+
+          {/* Website / Portfolio */}
+          <FormField control={form.control} name="website_url" render={({ field }) => (
+            <FormItem>
+              <FormLabel>Sitio web / Portfolio</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input {...field} placeholder="https://miportfolio.com" className="pl-9" />
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} />
+
+          {/* Social Links */}
+          <div className="space-y-3">
+            <Label>Redes sociales</Label>
+            <FormField control={form.control} name="social_linkedin" render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative">
+                    <Linkedin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input {...field} placeholder="https://linkedin.com/in/tu-perfil" className="pl-9" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="social_github" render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative">
+                    <Github className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input {...field} placeholder="https://github.com/tu-usuario" className="pl-9" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="social_twitter" render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative">
+                    <Twitter className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input {...field} placeholder="https://x.com/tu-usuario" className="pl-9" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+            <FormField control={form.control} name="social_instagram" render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative">
+                    <Instagram className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input {...field} placeholder="https://instagram.com/tu-usuario" className="pl-9" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+          </div>
 
           {/* Skills */}
           <div className="space-y-2">
