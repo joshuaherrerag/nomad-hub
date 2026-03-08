@@ -216,10 +216,12 @@ export default function AdminUsersPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => toggleRole.mutate({ userId: p.id, currentRole: role })}
+                          onClick={() => setConfirmAction({ type: "role", user: p, currentRole: role })}
                           aria-label={role === "admin" ? "Quitar admin" : "Hacer admin"}
+                          title={role === "admin" ? "Quitar admin" : "Hacer admin"}
                         >
                           <Shield className={`h-4 w-4 ${role === "admin" ? "text-primary" : ""}`} />
+                        </Button>
                         </Button>
                         <Button
                           variant="ghost"
