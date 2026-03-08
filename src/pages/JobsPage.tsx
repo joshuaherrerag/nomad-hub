@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { Search, SlidersHorizontal, X, SearchX } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Search, SlidersHorizontal, X, SearchX, PlusCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
