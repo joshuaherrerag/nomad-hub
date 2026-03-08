@@ -33,12 +33,12 @@ export default function JobListCard({ job, saved, onToggleSave }: Props) {
 
   return (
     <div
-      className={`flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 md:flex-row md:items-center md:gap-4 md:p-6 transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)] ${
+      className={`flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 lg:flex-row lg:items-center lg:gap-4 lg:p-6 transition-shadow hover:shadow-[0_8px_32px_rgba(231,111,81,0.1)] ${
         job.is_featured ? "border-l-4 border-l-primary bg-primary/5" : ""
       }`}
     >
-      {/* Logo */}
-      <div className="flex items-center gap-3 md:gap-4">
+      {/* Logo + Info */}
+      <div className="flex items-center gap-3 lg:gap-4 lg:min-w-[220px] lg:shrink-0">
         {job.company_logo_url ? (
           <img src={job.company_logo_url} alt={`Logo de ${job.company_name}`} className="h-12 w-12 shrink-0 rounded-xl object-cover" />
         ) : (
@@ -47,14 +47,14 @@ export default function JobListCard({ job, saved, onToggleSave }: Props) {
           </div>
         )}
 
-        {/* Info */}
         <div className="min-w-0 flex-1">
           <h3 className="truncate font-display text-sm font-semibold text-foreground">{job.title}</h3>
           <p className="truncate text-sm text-muted-foreground">{job.company_name}</p>
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2 md:flex-1">
+      {/* Meta + Actions */}
+      <div className="flex flex-wrap items-center justify-between gap-2 lg:flex-1">
         <div className="flex flex-wrap items-center gap-1.5">
           {job.category && (
             <Badge variant="secondary" className="border-0 bg-accent/10 text-xs text-accent">
@@ -78,7 +78,6 @@ export default function JobListCard({ job, saved, onToggleSave }: Props) {
           )}
         </div>
 
-        {/* Actions */}
         <div className="flex shrink-0 items-center gap-1">
           <Button
             variant="ghost"
