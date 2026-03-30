@@ -44,6 +44,7 @@ export default function LoginPage() {
         Inicia sesión para continuar
       </p>
 
+      {/* INICIO DEL BLOQUE OCULTO DE GOOGLE
       <Button
         type="button"
         variant="outline"
@@ -66,7 +67,8 @@ export default function LoginPage() {
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">o con tu email</span>
         </div>
-      </div>
+      </div> 
+      FIN DEL BLOQUE OCULTO */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>

@@ -45,6 +45,7 @@ export default function RegisterPage() {
         Únete a la comunidad de nómadas digitales
       </p>
 
+      {/* INICIO DEL BLOQUE OCULTO DE GOOGLE
       <Button
         type="button"
         variant="outline"
@@ -68,6 +69,7 @@ export default function RegisterPage() {
           <span className="bg-background px-2 text-muted-foreground">o con tu email</span>
         </div>
       </div>
+      FIN DEL BLOQUE OCULTO */}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
